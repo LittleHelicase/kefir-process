@@ -2,7 +2,7 @@
   "name": "kefir-process",
   "version": "1.0.0",
   "description": "Using kefir to create communicating processes.",
-  "main": "lib/index.js",
+  "main": "lib/api.js",
   "scripts": {
     "test": "node node_modules/standard/bin/cmd.js src/**/*.js && gulp && node node_modules/ava/cli.js"
   },
