@@ -1,11 +1,11 @@
 
-import Kefir from 'kefir'
 import {spawn} from 'child_process'
+import Kefir from 'kefir'
 
-var streamProgram = (prog, args) => {
+export function fromProgram (program, args) {
   args = args || []
   return (value) => {
-    var instance = spawn(prog, args)
+    var instance = spawn(program, args)
 
     var stream = Kefir.stream(emitter => {
       instance.stdout.on('data', data => {
@@ -26,7 +26,3 @@ var streamProgram = (prog, args) => {
     return stream
   }
 }
-
-Kefir.sequentially(100, [1, 2, 3])
-  .flatMap(streamProgram('node', [__dirname + '/../example/inc.js']))
-  .log()

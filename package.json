@@ -1,16 +1,17 @@
 {
-  "name": "kefir-proc-communication",
+  "name": "kefir-process",
   "version": "1.0.0",
   "description": "Using kefir to create communicating processes.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "node node_modules/standard/bin/cmd.js src/**/*.js && gulp && node_modules/mocha/bin/mocha --compilers js:babel/register"
+    "test": "node node_modules/standard/bin/cmd.js src/**/*.js && gulp && node node_modules/ava/cli.js"
   },
   "keywords": [
     "Stream-processing",
     "kefir"
   ],
   "devDependencies": {
+    "ava": "^0.10.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-register": "^6.3.13",
     "gulp": "^3.9.0",
@@ -24,5 +25,11 @@
   "dependencies": {
     "kefir": "^3.2.0",
     "kefir-node-stream": "elsehow/kefir-node-stream"
+  },
+  "ava": {
+    "files": [
+      "test/*.js"
+    ],
+    "require": ["babel-core/register"]
   }
 }
