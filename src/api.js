@@ -2,7 +2,7 @@
 import {spawn} from 'child_process'
 import Kefir from 'kefir'
 
-export function fromProgram (program, args) {
+export function createProcess (program, args) {
   args = args || []
   return (value) => {
     var instance = spawn(program, args)
