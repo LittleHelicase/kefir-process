@@ -12,20 +12,23 @@ test.cb('called programm terminates', t => {
 })
 
 test.cb('called programm terminates', t => {
-  t.plan(3)
-  var wanted = Kefir.sequentially(0, [2, 3, 4])
-  var result = Kefir.sequentially(10, [1, 2, 3])
-    .flatMap(createProcess('node', ['fixtures/inc.js']))
+  var num = 400
+  var count = 0
+  t.plan(4 * num)
+  var wanted = Kefir.sequentially(22, Array(num + 1).join('23').split('').map(Number))
+  var result = Kefir.sequentially(17, Array(num + 1).join('12').split('').map(Number))
+    .flatMapConcat(createProcess('node', ['fixtures/inc.js']))
     .map(Number)
+    .onValue(v => { count++; t.same(v, (count % 2 === 1) ? 2 : 3) })
   Kefir.zip([wanted, result])
     .onValue(v => { t.same(v[0], v[1]) })
     .onEnd(() => { t.end() })
 })
 
 test.cb('call system program grep', t => {
-  t.plan(1)
+  t.plan(2)
   Kefir.sequentially(10, ['Kefir', 'Process', 'App'])
-    .flatMap(createProcess('grep', ['Process']))
-    .onValue(v => { t.same(v, 'Process\n') }) // unfortunately, grep adds a newline at the end
-    .onEnd(() => { t.end() })
+    .flatMap(createProcess('grep', ['Process'])) // -Z no newline!
+    .onValue(v => { console.log('value', v); t.same(v, 'Process\n') }) // unfortunately, grep adds a newline at the end
+    .onEnd(() => { console.log('end!'); t.pass(); t.end() })
 })
