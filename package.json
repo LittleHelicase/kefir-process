@@ -1,6 +1,6 @@
 {
   "name": "kefir-process",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Using kefir to create communicating processes.",
   "main": "lib/api.js",
   "scripts": {
