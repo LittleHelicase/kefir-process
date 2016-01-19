@@ -4,10 +4,10 @@ import Kefir from 'kefir'
 
 const maxParallel = 4
 
-function fromMultiCallback(callbackConsumer) {
+function fromMultiCallback (callbackConsumer) {
   return Kefir.stream(emitter => {
     callbackConsumer(x => {
-      if(x == null) { 
+      if (x == null) {
         emitter.end()
         return
       }
@@ -19,13 +19,13 @@ function fromMultiCallback(callbackConsumer) {
 export function createProcess (program, args) {
   args = args || []
   var nextCallback
+  // start maxParallel
   var canRun = Kefir.merge(
     [
-      Kefir.sequentially(0,  Array(maxParallel + 1).join('a').split('')),
+      Kefir.sequentially(0, Array(maxParallel + 1).join('a').split('')),
       fromMultiCallback(callback => { nextCallback = callback })
     ])
   var inputStream = Kefir.never()
-    // start maxParallel 
   return (value) => {
     inputStream = Kefir.concat([inputStream, Kefir.later(1, value)])
     var canThisRun = canRun.take(1)
@@ -34,7 +34,7 @@ export function createProcess (program, args) {
         var instance = spawn(program, args)
         return instance
       })
-    
+
     var readyCallback
     var readyStream = Kefir.fromCallback(callback => { readyCallback = callback })
 
@@ -51,11 +51,11 @@ export function createProcess (program, args) {
           console.error(data.toString())
         })
         readyCallback(instance)
-      })      
+      })
       readyStream.onValue(instance => {
-          instance.stdin.write('' + value)
-          instance.stdin.end()
-        })
+        instance.stdin.write('' + value)
+        instance.stdin.end()
+      })
     })
 
     return stream
